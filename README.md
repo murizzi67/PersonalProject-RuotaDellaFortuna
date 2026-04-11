@@ -11,3 +11,4 @@
 ## POSSIBILI IMPLEMENTAZIONI A PROGETTO GIA COMPLETATO
   - possibilita' di fare partecipare 3 utenti insieme con un'area dedicata per ciascuno
   - possibilita' di fare inserire una frase bonus da fare indovinare agli altri
+  - frasi genereti dall'ia tramite un api, senza probabilita' di ripetizioni nel caso di averci gia' giocato numerose volte
