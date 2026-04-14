@@ -23,7 +23,7 @@ namespace RuotaDellaFortuna
 
                 while (scelta < 0 || scelta > 4)
                 {
-                    
+
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("!Input non valido!\n");
                     if (Counter1stcheck > 1)
@@ -44,6 +44,7 @@ namespace RuotaDellaFortuna
                         Regole();
                         break;
                     case 3:
+                        FraseEasteregg();
                         //DEBUG: visualizzazione attivita nel turno
                         break;
                     case 0:
@@ -53,19 +54,87 @@ namespace RuotaDellaFortuna
                 }
             }
         }
-        static void Menu() 
+        static void Stampa(char[][] frase, bool[][] scoperte)
         {
-            Console.ForegroundColor= ConsoleColor.Cyan;
+            for (int i = 0; i < frase[0][i]; i++)
+            {
+                Console.Write(frase);
+            }
+        }
+        static void FraseEasteregg()
+        {
+            char[][] fraseegg = new char[4][];
+            fraseegg[0] = "vinsero-la".ToCharArray();
+            fraseegg[1] = "battaglia".ToCharArray();
+            fraseegg[2] = "grazie-alla".ToCharArray();
+            fraseegg[3] = "loro-fuga".ToCharArray();
+
+            bool[][] scoperte = CheckLettere(fraseegg);
+            char[][] vuoto = JaggedVuoto(fraseegg);
+            //Stampa(fraseegg, scoperte);
+
+            //todo
+        }
+        static char[][] JaggedVuoto(char[][] frase)
+        {
+            char[][] vuoto = new char[4][];
+
+            for (int i = 0; i < frase.Length; i++)
+            {
+                vuoto[i] = new char[frase[i].Length];
+            }
+            for (int i = 0; i < vuoto.Length; i++)
+            {
+                for (int j = 0; j < vuoto[i].Length; j++)
+                {
+                    vuoto[i][j] = '_';
+                }
+            }
+
+            Stampadebug(frase, vuoto);
+
+            return vuoto;
+        }
+        static bool[][] CheckLettere(char[][] checkfrase)
+        {
+            bool[][] jaggedFrase = new bool[4][];
+            for (int i = 0; i < checkfrase.Length; i++)
+            {
+                jaggedFrase[i] = new bool[checkfrase[i].Length];
+            }
+            return jaggedFrase;
+        }
+        static void tastiera(char input) //WIP      
+        {
+            Console.Write("Q");
+        }
+        static void Menu()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("------------------------------");
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("1 - Gioca!");
-                Console.ResetColor();
+            Console.ResetColor();
             Console.WriteLine("2 - Regole");
             Console.WriteLine("3 - Visualizzazione attivita'");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("------------------------------");
             Console.ResetColor();
+        }
+        static void Stampadebug(char[][] frase, char[][] vuoto)
+        {
+            for (int i = 0; frase.Length > i; i++)
+            {
+                for (int j = 0; j < frase[i].Length; j++)
+                {
+                    if (frase[i][j] == '-')
+                        Console.Write("  "); // due spazi per allineamento
+                    else
+                        Console.Write(vuoto[i][j] + " ");
+                }
+                Console.WriteLine();
+            }
         }
         static void Regole()
         {
