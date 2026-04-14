@@ -1,7 +1,7 @@
 # RuotaDellaFortuna
 ## progetto personale inspirato al omonimo programma televisivo 
 # Elementi principali:
-  1. jagged array contente la frase, gia inizializzato - parole rappresentate caratteri per il controllo
+  1. jagged array contenente la frase, gia inizializzato - parole rappresentate caratteri per il controllo
   2. controllo sull'input del utente per verificare l'inserimento della lettera corretta/errata
   3. una specie di "ruota" contente i punti da poter guadagnare durante il turno
 
