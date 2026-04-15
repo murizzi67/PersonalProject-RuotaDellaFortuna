@@ -1,0 +1,14 @@
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\bin\Debug\RoutaDellaFortuna.exe.config
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\bin\Debug\RoutaDellaFortuna.exe
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\bin\Debug\RoutaDellaFortuna.pdb
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.csproj.AssemblyReference.cache
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.csproj.CoreCompileInputs.cache
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.exe
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.pdb
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\bin\Debug\RoutaDellaFortuna.exe.config
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\bin\Debug\RoutaDellaFortuna.exe
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\bin\Debug\RoutaDellaFortuna.pdb
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.csproj.AssemblyReference.cache
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.csproj.CoreCompileInputs.cache
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.exe
+C:\Users\Simone Murizzi\source\repos\RoutaDellaFortuna2\RoutaDellaFortuna\obj\Debug\RoutaDellaFortuna.pdb
