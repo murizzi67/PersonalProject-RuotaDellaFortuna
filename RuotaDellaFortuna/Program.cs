@@ -1,29 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace RuotaDellaFortuna
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
             //interfaccia principale e menu
             bool continua = true;
             int scelta;
             int Counter1stcheck = 0;
+            int CONTO = 0;
             while (continua)
             {
                 Menu();
                 Console.Write("Insersci numero --> ");
                 scelta = int.Parse(Console.ReadLine());
 
-                while (scelta < 0 || scelta > 4)
+                while (scelta < 0 || scelta >= 4)
                 {
-
+                    Console.Clear();
+                    Menu();
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("!Input non valido!\n");
                     if (Counter1stcheck > 1)
@@ -38,14 +37,14 @@ namespace RuotaDellaFortuna
                 switch (scelta)
                 {
                     case 1:
-                        //DEBUG: gico 
+                        FraseEasteregg();
+                        //DEBUG: gioco 
                         break;
                     case 2:
                         Regole();
                         break;
                     case 3:
-                        FraseEasteregg();
-                        //DEBUG: visualizzazione attivita nel turno
+                        Console.WriteLine("DEBUG: visualizzazione attivita nel turno"); 
                         break;
                     case 0:
                         continua = false;
@@ -54,56 +53,100 @@ namespace RuotaDellaFortuna
                 }
             }
         }
-        static void Stampa(char[][] frase, bool[][] scoperte)
+        static void Stampa(char[][] frase, char[][] JaggedSupporto, string argomento)
         {
-            for (int i = 0; i < frase[0][i]; i++)
+            bool ContinuaRound = true;
+            while (ContinuaRound)
             {
-                Console.Write(frase);
+                Intestazione(argomento);
+
+                for (int i = 0; i < frase.Length; i++)
+                {
+                    for (int j = 0; j < frase[i].Length; j++)
+                    {
+                        Console.Write(JaggedSupporto[i][j] + " ");
+                    }
+                    Console.WriteLine();
+                }
+                char GuessLettera = GuessChar();
+                ContinuaRound = CheckLetteraIndovinata(frase, JaggedSupporto, GuessLettera);
             }
+            Console.WriteLine("mi spiace, la lettera che hai provato a indovinare non e' presente nella frase!");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.WriteLine("DEBUG: POSSIBILITA' DI RESPIN");
+            Console.ResetColor();
         }
         static void FraseEasteregg()
         {
+            string argomento = "Argomento --> Frase easter egg!";
             char[][] fraseegg = new char[4][];
             fraseegg[0] = "vinsero-la".ToCharArray();
             fraseegg[1] = "battaglia".ToCharArray();
             fraseegg[2] = "grazie-alla".ToCharArray();
             fraseegg[3] = "loro-fuga".ToCharArray();
 
-            bool[][] scoperte = CheckLettere(fraseegg);
-            char[][] vuoto = JaggedVuoto(fraseegg);
-            //Stampa(fraseegg, scoperte);
+            //bool[][] scoperte = CheckLettere(fraseegg);
+            char[][] JaggedSupporto = CreaJaggedSupporto(fraseegg);
+            Stampa(fraseegg, JaggedSupporto, argomento);
 
-            //todo
         }
-        static char[][] JaggedVuoto(char[][] frase)
+        static char[][] CreaJaggedSupporto(char[][] frase)
         {
-            char[][] vuoto = new char[4][];
+            char[][] JaggedSupporto = new char[4][];
 
             for (int i = 0; i < frase.Length; i++)
             {
-                vuoto[i] = new char[frase[i].Length];
-            }
-            for (int i = 0; i < vuoto.Length; i++)
-            {
-                for (int j = 0; j < vuoto[i].Length; j++)
+                JaggedSupporto[i] = new char[frase[i].Length];
+
+                for (int j = 0; j < JaggedSupporto[i].Length; j++)
                 {
-                    vuoto[i][j] = '_';
+                    if (frase[i][j] == '-')
+                    {
+                        JaggedSupporto[i][j] = ' ';
+                    }
+                    else
+                    {
+                        JaggedSupporto[i][j] = '_';
+                    }
                 }
             }
 
-            Stampadebug(frase, vuoto);
+            //Stampadebug(frase, JaggedSupporto);
 
-            return vuoto;
+            return JaggedSupporto;
         }
-        static bool[][] CheckLettere(char[][] checkfrase)
+        static bool CheckLetteraIndovinata(char[][] frase, char[][] JaggedSupporto, char lettera)
         {
-            bool[][] jaggedFrase = new bool[4][];
-            for (int i = 0; i < checkfrase.Length; i++)
-            {
-                jaggedFrase[i] = new bool[checkfrase[i].Length];
+            int count =0;
+            for (int i = 0; i < frase.Length; i++)
+            { 
+                for (int j = 0; j < frase[i].Length; j++)
+                {
+                    if (lettera == frase[i][j])
+                    {
+                        JaggedSupporto[i][j] = frase[i][j];
+                        count++; 
+                    }
+                }
             }
-            return jaggedFrase;
+            if (count>0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
+        //{
+        //    bool[][] jaggedFrase = new bool[4][];
+        //    for (int i = 0; i < checkfrase.Length; i++)
+        //    {
+        //        jaggedFrase[i] = new bool[checkfrase[i].Length];
+        //    }
+        //    return jaggedFrase;
+        //}
         static void tastiera(char input) //WIP      
         {
             Console.Write("Q");
@@ -122,19 +165,42 @@ namespace RuotaDellaFortuna
             Console.WriteLine("------------------------------");
             Console.ResetColor();
         }
-        static void Stampadebug(char[][] frase, char[][] vuoto)
+        static void Stampadebug(char[][] frase, char[][] JaggedSupporto)
         {
             for (int i = 0; frase.Length > i; i++)
             {
                 for (int j = 0; j < frase[i].Length; j++)
                 {
                     if (frase[i][j] == '-')
-                        Console.Write("  "); // due spazi per allineamento
+                        Console.Write("  "); // due spazi per allineamento 
                     else
-                        Console.Write(vuoto[i][j] + " ");
+                        Console.Write(JaggedSupporto[i][j] + " ");
                 }
                 Console.WriteLine();
             }
+        }
+        static char GuessChar()
+        {
+            Console.Write("Prova a indovinare una consonante! --> ");
+            string input = Console.ReadLine();
+            char c;
+            while (string.IsNullOrEmpty(input))
+            {
+                Console.Write("nessun carattere inserito, riprovare: ");
+                input = Console.ReadLine();
+
+            }
+            c = input[0];
+            return c;
+        }
+        static void Intestazione(string argomento)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("RUOTA DELLA FORTUNA\r\n=====>-------<=====");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine(argomento + "\n");
         }
         static void Regole()
         {
