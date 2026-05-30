@@ -1,0 +1,7 @@
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\bin\Debug\RuotaDellaFortuna.exe.config
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\bin\Debug\RuotaDellaFortuna.exe
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\bin\Debug\RuotaDellaFortuna.pdb
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\obj\Debug\RuotaDellaFortuna.csproj.AssemblyReference.cache
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\obj\Debug\RuotaDellaFortuna.csproj.CoreCompileInputs.cache
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\obj\Debug\RuotaDellaFortuna.exe
+C:\Users\Simone Murizzi\source\repos\RuotaDellaFortuna\RuotaDellaFortuna\obj\Debug\RuotaDellaFortuna.pdb
