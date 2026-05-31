@@ -17,6 +17,9 @@ namespace RuotaDellaFortuna
             public char[][] JaggedSupporto;
             public char[][] FRASE;
             public int MOLTIPLICATORE;
+            public bool CHECKRUOTA;
+            public string ARGOMENTO;
+            public bool CHECKCONTO;
         }
         enum ValoreRouta
         {
@@ -40,7 +43,7 @@ namespace RuotaDellaFortuna
         {
             'b','c','d','f','g','h','l','m','n','p','q','r','s','t','v','z'
         };
-        static HashSet<char> vocali = new HashSet<char>()
+        static List<char> vocali = new List<char>()
         {
             'a','e','i','o','u'
         };
@@ -56,6 +59,7 @@ namespace RuotaDellaFortuna
             bool continua = true;
             int scelta;
             int Counter1stcheck = 0;
+            game.CONTO = 100000;
 
             while (continua)
             {
@@ -197,13 +201,17 @@ namespace RuotaDellaFortuna
             return game.JaggedSupporto;
         }
 
-        static void Stampa(string argomento)
+        static void Stampa()
         {
-            Ruota();
+            if (!game.CHECKRUOTA)
+            {
+                Ruota();
+            }
+            game.CHECKRUOTA = false;
             bool ContinuaRound = true;
             while (ContinuaRound)
             {
-                Intestazione(argomento);
+                Intestazione();
 
                 for (int i = 0; i < game.FRASE.Length; i++)
                 {
@@ -237,7 +245,11 @@ namespace RuotaDellaFortuna
                     }
                 }
             }
-            game.CONTO += (game.MOLTIPLICATORE * count);
+            if (!game.CHECKCONTO)
+            { 
+                game.CONTO += (game.MOLTIPLICATORE * count);
+            }
+            game.CHECKCONTO = false;
             return count > 0;
         }
 
@@ -275,8 +287,32 @@ namespace RuotaDellaFortuna
         }
         static void NegozioVocali()
         {
-            if (game.CONTO < 500) { Console.WriteLine("Saldo insufficiente"); return; }
-            GuessChar();
+            game.CHECKRUOTA = true;
+            game.CHECKCONTO = true;
+            if (game.CONTO < 500) { Console.WriteLine("Saldo insufficiente"); Thread.Sleep(1500); return; }
+            Console.Write("Scegli quale vocale comprare, e scoprire se la frase la contiene! \n a = 1\n e = 2 \n 3 = i \n o = 4 \n 5 = u \n 0 per uscire \n La tua scelta --> " );
+            int temp = int.Parse(Console.ReadLine());
+            switch (temp)
+            {
+                case 1:
+                    CheckLetteraIndovinata('a');
+                    break;
+                case 2:
+                    CheckLetteraIndovinata('e');
+                    break;
+                case 3:
+                    CheckLetteraIndovinata('i');
+                    break;
+                case 4:
+                    CheckLetteraIndovinata('o');
+                    break;
+                case 5:
+                    CheckLetteraIndovinata('u');
+                    break;
+                case 0: status = GameStatus.Menu; return;
+            }
+            game.CONTO -= 500;
+            Stampa();
         }
         static void GestioneConto()
         {
@@ -301,7 +337,7 @@ namespace RuotaDellaFortuna
 
         static void FraseEasteregg()
         {
-            string argomento = "Argomento --> Frase easter egg!";
+            game.ARGOMENTO = "Argomento --> Frase easter egg!";
             game.FRASE = new char[4][];
             game.FRASE[0] = "vinsero-la".ToCharArray();
             game.FRASE[1] = "battaglia".ToCharArray();
@@ -309,13 +345,13 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "loro-fuga".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa(argomento);
+            Stampa();
             return;
         }
 
         static void FraseProverbio()
         {
-            string argomento = "Argomento --> Proverbio italiano!";
+            game.ARGOMENTO = "Argomento --> Proverbio italiano!";
             game.FRASE = new char[4][];
             game.FRASE[0] = "chi-dorme-non".ToCharArray();
             game.FRASE[1] = "piglia-pesci".ToCharArray();
@@ -323,13 +359,13 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "ottiene-tutto".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa(argomento);
+            Stampa();
             return;
         }
 
         static void FraseMododidire()
         {
-            string argomento = "Argomento --> Modo di dire!";
+            game.ARGOMENTO = "Argomento --> Modo di dire!";
             game.FRASE = new char[4][];
             game.FRASE[0] = "non-tutte-le".ToCharArray();
             game.FRASE[1] = "ciambelle-riescono".ToCharArray();
@@ -337,13 +373,13 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "il-buco-giusto".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa(argomento);
+            Stampa();
             return;
         }
 
         static void FraseNatura()
         {
-            string argomento = "Argomento --> La natura!";
+            game.ARGOMENTO = "Argomento --> La natura!";
             game.FRASE = new char[4][];
             game.FRASE[0] = "il-sole-sorge".ToCharArray();
             game.FRASE[1] = "ogni-mattina".ToCharArray();
@@ -351,13 +387,13 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "mondo-intero".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa(argomento);
+            Stampa();
             return;
         }
 
         static void FraseViaggio()
         {
-            string argomento = "Argomento --> Il viaggio!";
+            game.ARGOMENTO = "Argomento --> Il viaggio!";
             game.FRASE = new char[4][];
             game.FRASE[0] = "viaggiare-apre".ToCharArray();
             game.FRASE[1] = "la-mente-e".ToCharArray();
@@ -365,13 +401,13 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "spirito-umano".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa(argomento);
+            Stampa();
             return;
         }
 
         static void FraseAmicizia()
         {
-            string argomento = "Argomento --> L'amicizia!";
+            game.ARGOMENTO = "Argomento --> L'amicizia!";
             game.FRASE = new char[4][];
             game.FRASE[0] = "un-vero-amico".ToCharArray();
             game.FRASE[1] = "vale-piu-di".ToCharArray();
@@ -379,18 +415,18 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "conosciute".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa(argomento);
+            Stampa();
             return;
         }
 
-        static void Intestazione(string argomento)
+        static void Intestazione()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("RUOTA DELLA FORTUNA\r\n=====>-------<=====");
             Console.ResetColor();
             Console.WriteLine($"Conto: {game.CONTO} ");
-            Console.WriteLine(argomento + "\n");
+            Console.WriteLine(game.ARGOMENTO + "\n");
         }
 
         static void Menu()
