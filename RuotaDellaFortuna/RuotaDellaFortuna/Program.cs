@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
@@ -143,7 +144,7 @@ namespace RuotaDellaFortuna
                     status = GameStatus.Menu;
                     game.BANCA = 0;
                     Thread.Sleep(2000);
-                    break;
+                    goto Respin;
                 case ValoreRouta.SkipTurno:
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -156,7 +157,7 @@ namespace RuotaDellaFortuna
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Giochi per {(int)risultato} punti!");
-                    Thread.Sleep(3000);
+                    Thread.Sleep(2000);
                     Console.ResetColor();
                     game.MOLTIPLICATORE = (int)risultato;
                     break;
@@ -201,7 +202,7 @@ namespace RuotaDellaFortuna
             return game.JaggedSupporto;
         }
 
-        static void Stampa()
+        static void Gioco()
         {
             if (!game.CHECKRUOTA)
             {
@@ -211,16 +212,9 @@ namespace RuotaDellaFortuna
             bool ContinuaRound = true;
             while (ContinuaRound)
             {
-                Intestazione();
 
-                for (int i = 0; i < game.FRASE.Length; i++)
-                {
-                    for (int j = 0; j < game.FRASE[i].Length; j++)
-                    {
-                        Console.Write(game.JaggedSupporto[i][j] + " ");
-                    }
-                    Console.WriteLine();
-                }
+                Stampa();
+
                 char GuessLettera = GuessChar();
                 ContinuaRound = CheckLetteraIndovinata(GuessLettera);
             }
@@ -289,9 +283,28 @@ namespace RuotaDellaFortuna
         {
             game.CHECKRUOTA = true;
             game.CHECKCONTO = true;
+            int temp = 0;
             if (game.CONTO < 500) { Console.WriteLine("Saldo insufficiente"); Thread.Sleep(1500); return; }
-            Console.Write("Scegli quale vocale comprare, e scoprire se la frase la contiene! \n a = 1\n e = 2 \n 3 = i \n o = 4 \n 5 = u \n 0 per uscire \n La tua scelta --> " );
-            int temp = int.Parse(Console.ReadLine());
+            while (true)
+            {
+                try
+                {
+                    Console.Clear();
+                    Stampa();
+                    Console.Write("Scegli quale vocale comprare, e scoprire se la frase la contiene! \n a = 1\n e = 2 \n 3 = i \n o = 4 \n 5 = u \n 0 per uscire \n La tua scelta --> ");
+                    temp = int.Parse(Console.ReadLine());
+                    break; // input valido, esci dal while
+                }
+                catch (Exception)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Inserire numeri, non lettere!");
+                    Console.ResetColor();
+                    Thread.Sleep(1500);
+                    Console.Write("La tua scelta --> ");
+                }
+            }
+
             switch (temp)
             {
                 case 1:
@@ -312,8 +325,23 @@ namespace RuotaDellaFortuna
                 case 0: status = GameStatus.Menu; return;
             }
             game.CONTO -= 500;
-            Stampa();
+            Gioco();
         }
+
+        static void Stampa()
+        {
+            Intestazione();
+
+            for (int i = 0; i < game.FRASE.Length; i++)
+            {
+                for (int j = 0; j < game.FRASE[i].Length; j++)
+                {
+                    Console.Write(game.JaggedSupporto[i][j] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+
         static void GestioneConto()
         {
             game.BANCA += game.CONTO;
@@ -345,7 +373,7 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "loro-fuga".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa();
+            Gioco();
             return;
         }
 
@@ -359,7 +387,7 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "ottiene-tutto".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa();
+            Gioco();
             return;
         }
 
@@ -373,7 +401,7 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "il-buco-giusto".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa();
+            Gioco();
             return;
         }
 
@@ -387,7 +415,7 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "mondo-intero".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa();
+            Gioco();
             return;
         }
 
@@ -401,7 +429,7 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "spirito-umano".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa();
+            Gioco();
             return;
         }
 
@@ -415,7 +443,7 @@ namespace RuotaDellaFortuna
             game.FRASE[3] = "conosciute".ToCharArray();
 
             game.JaggedSupporto = CreaJaggedSupporto();
-            Stampa();
+            Gioco();
             return;
         }
 
