@@ -11,16 +11,19 @@ namespace RuotaDellaFortuna
 {
     internal class Program
     {
+        //VARIABILI GLOBALI
         struct GameVariables
         {
             public int CONTO;
             public int BANCA;
             public char[][] JaggedSupporto;
             public char[][] FRASE;
+            public char[][] TASTIERA;
             public int MOLTIPLICATORE;
             public bool CHECKRUOTA;
             public string ARGOMENTO;
             public bool CHECKCONTO;
+
         }
         enum ValoreRouta
         {
@@ -40,15 +43,16 @@ namespace RuotaDellaFortuna
             Victory,
             Running,
         }
-
+        //LETTERE
         static HashSet<char> consonanti = new HashSet<char>()
         {
             'b','c','d','f','g','h','l','m','n','p','q','r','s','t','v','z'
         };
-        static List<char> vocali = new List<char>()
-        {
-            'a','e','i','o','u'
-        };
+
+        static HashSet<char> lettereGiuste = new HashSet<char>();
+
+        static HashSet<char> lettereSbagliate = new HashSet<char>(); //ANCHE SE PRATICAMENTE NON VENGONO MAI MOSTRATE CAUSA MECCANICHE DI GIOCO
+                                                                     //SONO STATE AGGIUNTE FIN DA SUBITO PER LA FUTURA IMPLEMENTAZIONE DEL MULTIPLAYER 
 
         static GameVariables game = new GameVariables();
 
@@ -57,7 +61,7 @@ namespace RuotaDellaFortuna
 
         static void Main(string[] args)
         {
-
+            InizializzaTastiera();
             bool continua = true;
             int scelta;
             int Counter1stcheck = 0;
@@ -71,6 +75,9 @@ namespace RuotaDellaFortuna
                 {
                     goto GoBack;
                 }
+                //SVUOTA HASHSET DELLE LETTERE
+                lettereGiuste.Clear();
+                lettereSbagliate.Clear();
                 Menu();
                 Console.Write("Insersci numero --> ");
                 scelta = int.Parse(Console.ReadLine());
@@ -169,6 +176,7 @@ namespace RuotaDellaFortuna
             return;
 
         }
+
         static void SceltaFraseRandom()
         {
             Random rnd = new Random();
@@ -230,6 +238,15 @@ namespace RuotaDellaFortuna
                 }
                 char GuessLettera = GuessChar();
                 ContinuaRound = CheckLetteraIndovinata(GuessLettera);
+                if (ContinuaRound)
+                {
+                    lettereGiuste.Add(GuessLettera);
+                }
+                else
+                {
+                    lettereSbagliate.Add(GuessLettera);
+                }
+
             }
             Console.Clear();
             Console.WriteLine("mi spiace, la lettera che hai provato a indovinare non e' presente nella frase!");
@@ -262,10 +279,8 @@ namespace RuotaDellaFortuna
 
         static char GuessChar()
         {
-            //if (string.IsNullOrEmpty()
-            {
-                Console.Write("Prova a indovinare una consonante! --> ");
-            }
+
+            Console.Write("Prova a indovinare una consonante! --> ");
 
             Def1();
             string input = Console.ReadLine();
@@ -305,7 +320,7 @@ namespace RuotaDellaFortuna
                     Console.Clear();
                     Stampa();
                     Console.Write("Scegli quale vocale comprare, e scoprire se la frase la contiene! \n a = 1\n e = 2 \n 3 = i \n o = 4 \n 5 = u \n 0 per uscire \n La tua scelta --> ");
-                    temp = int.Parse(Console.ReadLine().ToLower());
+                    temp = int.Parse(Console.ReadLine());
                     break; // input valido, esci dal while
                 }
                 catch (Exception)
@@ -322,18 +337,23 @@ namespace RuotaDellaFortuna
             {
                 case 1:
                     CheckLetteraIndovinata('a');
+                    lettereGiuste.Add('a');
                     break;
                 case 2:
                     CheckLetteraIndovinata('e');
+                    lettereGiuste.Add('e');
                     break;
                 case 3:
                     CheckLetteraIndovinata('i');
+                    lettereGiuste.Add('1');
                     break;
                 case 4:
                     CheckLetteraIndovinata('o');
+                    lettereGiuste.Add('o');
                     break;
                 case 5:
                     CheckLetteraIndovinata('u');
+                    lettereGiuste.Add('u');
                     break;
                 case 0: status = GameStatus.Menu; return;
             }
@@ -353,8 +373,35 @@ namespace RuotaDellaFortuna
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
+            StampaTastiera();
+            Console.WriteLine();
         }
 
+        static void StampaTastiera() 
+        {
+            for (int i = 0; i < game.TASTIERA.Length; i++)
+            {
+                for (int j = 0; j < game.TASTIERA[i].Length; j++)
+                {
+                    if (lettereGiuste.Contains(game.TASTIERA[i][j])) 
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write(game.TASTIERA[i][j] + " "); 
+                        Console.ResetColor();
+                    }
+                    else if (lettereSbagliate.Contains(game.TASTIERA[i][j]))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(game.TASTIERA[i][j] + " ");
+                        Console.ResetColor();
+                    }
+                    else Console.Write(game.TASTIERA[i][j] + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+        
         static bool CheckVittoria()
         {
             for (int i = 0; i < game.JaggedSupporto.Length; i++)
@@ -539,7 +586,15 @@ namespace RuotaDellaFortuna
             Gioco();
             return;
         }
-
+        static void InizializzaTastiera()
+        {
+            game.TASTIERA = new char[][]
+            {
+                new char[] { 'q','w','e','r','t','y','u','i','o'},
+                new char[] { 'a','s','d','f','g','h','l','p'},
+                new char[] { 'z','x','c','v','b','n','m'}
+            };
+        }
         static void Intestazione()
         {
             Console.Clear();
