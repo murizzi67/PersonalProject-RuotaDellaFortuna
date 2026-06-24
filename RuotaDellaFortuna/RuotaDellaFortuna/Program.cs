@@ -14,16 +14,16 @@ namespace RuotaDellaFortuna
         //VARIABILI GLOBALI
         struct GameVariables
         {
+            public bool CHECKCONTO;
+            public bool CHECKRUOTA;
             public int CONTO;
             public int BANCA;
+            public int MOLTIPLICATORE;
             public char[][] JaggedSupporto;
             public char[][] FRASE;
             public char[][] TASTIERA;
-            public int MOLTIPLICATORE;
-            public bool CHECKRUOTA;
             public string ARGOMENTO;
-            public bool CHECKCONTO;
-
+            public string LOGTURNO;
         }
         enum ValoreRouta
         {
@@ -58,7 +58,7 @@ namespace RuotaDellaFortuna
 
         static GameStatus status = new GameStatus();
 
-
+        //TODO: COMPLETARE E RIFINIRE STAMPA ATTIVITA + 
         static void Main(string[] args)
         {
             InizializzaTastiera();
@@ -75,7 +75,7 @@ namespace RuotaDellaFortuna
                 {
                     goto GoBack;
                 }
-                //SVUOTA HASHSET DELLE LETTERE
+                //RESET HASHSET
                 lettereGiuste.Clear();
                 lettereSbagliate.Clear();
                 Menu();
@@ -100,15 +100,18 @@ namespace RuotaDellaFortuna
                 switch (scelta)
                 {
                     case 1:
+                        //if (status != GameStatus.Victory) goto GoBack;
+                        game.LOGTURNO = "";
                         SceltaFraseRandom();
-                        if (status != GameStatus.Victory) goto GoBack;
                         break;
                     case 2:
+                        Console.Clear();
                         Regole();
                         break;
                     case 3:
                         Console.Clear();
                         Console.WriteLine($"Statistiche attuali: \n Conto: {game.CONTO}\n Banca: {game.BANCA}");
+                        Console.WriteLine("Attivita' turno: \n\n" + game.LOGTURNO);
                         break;
                     case 0:
                         continua = false;
@@ -152,6 +155,7 @@ namespace RuotaDellaFortuna
                     Console.ResetColor();
                     status = GameStatus.Menu;
                     game.BANCA = 0;
+                    game.LOGTURNO = game.LOGTURNO + $"\tHai girato la ruota e sei finito in bancarotta. \n\n";
                     Thread.Sleep(2000);
                     Console.Clear();
                     goto Respin;
@@ -159,6 +163,7 @@ namespace RuotaDellaFortuna
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine("Skip turno! Respin!");
+                    game.LOGTURNO = game.LOGTURNO + $"\tHai girato la ruota e ottenuto un respin. \n\n";
                     Console.ResetColor();
                     Thread.Sleep(2000);
                     Console.Clear();
@@ -170,6 +175,7 @@ namespace RuotaDellaFortuna
                     Thread.Sleep(2000);
                     Console.ResetColor();
                     game.MOLTIPLICATORE = (int)risultato;
+                    game.LOGTURNO = game.LOGTURNO + $"\tHai girato la ruota per {(int)risultato} punti. \n\n";
                     break;
 
             }
@@ -220,6 +226,7 @@ namespace RuotaDellaFortuna
 
         static void Gioco()
         {
+            char GuessLettera = ' ';
             if (!game.CHECKRUOTA)
             {
                 Ruota();
@@ -234,22 +241,30 @@ namespace RuotaDellaFortuna
                 {
                     Vittoria();
                     status = GameStatus.Victory;
+                    game.LOGTURNO = game.LOGTURNO + $"Hai vinto il round! \n";
                     return;
                 }
-                char GuessLettera = GuessChar();
+                GuessLettera = GuessChar();
                 ContinuaRound = CheckLetteraIndovinata(GuessLettera);
                 if (ContinuaRound)
                 {
                     lettereGiuste.Add(GuessLettera);
+                    game.LOGTURNO = game.LOGTURNO + $"\tHai indovinato la lettera {GuessLettera}. \n\n";
                 }
                 else
                 {
+                    if (GuessLettera == '0') break;
                     lettereSbagliate.Add(GuessLettera);
+                    game.LOGTURNO = game.LOGTURNO + $"\tHai provato a indovinare la lettera {GuessLettera}, era sbagliata. \n\n";
                 }
 
             }
             Console.Clear();
+            //if (GuessLettera != '0')
+            {
             Console.WriteLine("mi spiace, la lettera che hai provato a indovinare non e' presente nella frase!");
+
+            }
             status = GameStatus.Menu;
             Console.ResetColor();
             return;
@@ -345,7 +360,7 @@ namespace RuotaDellaFortuna
                     break;
                 case 3:
                     CheckLetteraIndovinata('i');
-                    lettereGiuste.Add('1');
+                    lettereGiuste.Add('i');
                     break;
                 case 4:
                     CheckLetteraIndovinata('o');
@@ -355,7 +370,9 @@ namespace RuotaDellaFortuna
                     CheckLetteraIndovinata('u');
                     lettereGiuste.Add('u');
                     break;
-                case 0: status = GameStatus.Menu; return;
+                case 0: 
+                    status = GameStatus.Menu; 
+                    return;
             }
             game.CONTO -= 500;
             Gioco();
@@ -396,7 +413,10 @@ namespace RuotaDellaFortuna
                         Console.Write(game.TASTIERA[i][j] + " ");
                         Console.ResetColor();
                     }
-                    else Console.Write(game.TASTIERA[i][j] + " ");
+                    else 
+                    {
+                        Console.Write(game.TASTIERA[i][j] + " ");                
+                    }
                 }
                 Console.WriteLine();
             }
